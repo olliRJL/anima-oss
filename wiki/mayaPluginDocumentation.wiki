@@ -68,10 +68,10 @@
 || *INPUTS* || *type* || *description* ||
 || .origMesh || mesh || the mesh at "rest pose" (should not deform)||
 || .inMesh || mesh || the input mesh (normally the rigged mesh)||
-|| .shrinkMin || float || amount of shrink which becomes 0.0 ||
-|| .shrinkMax || float || amount of shrink which becomes 1.0 ||
-|| .stretchMin || float || amount of stretch which becomes 0.0 ||
-|| .stretchMax || float || amount of stretch which becomes 1.0 ||
+|| .shrinkMin || float || amount of shrink which becomes R=0.0 ||
+|| .shrinkMax || float || amount of shrink which becomes R=1.0 ||
+|| .stretchMin || float || amount of stretch which becomes G=0.0 ||
+|| .stretchMax || float || amount of stretch which becomes G=1.0 ||
 
 || *OUTPUTS* || *type* || *description* ||
 || .outMesh || mesh || the output mesh with the vtxColors ||
