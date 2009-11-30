@@ -6,6 +6,21 @@ Documentation for the anima-oss maya plugins
 = animaShaderSampler =
 
 == animaShaderSampler ==
+*Description:*
+ A node that samples the connected shader at points specified with connected matrices. Can also use user specified uv-values. Samples multiple points in one go.
+
+*Usage:*
+ Check animaShaderSampler.mel
+
+|| *INPUTS* || *type* || *description* ||
+|| .samplePosMatrixArray || matrixArray || array of xform matrices - connect worldMatrices here ||
+|| .uArray|| floatArray || array of u-values  ||
+|| .vArray|| floatArray || array of v-values  ||
+|| .inColor || float3 || connect shading network here ||
+|| .SG || string || shading group name if one wants to sample a shading group (with lights and all) instead of a plain shading network (overrides the connection at .inColor) ||
+
+|| *OUTPUTS* || *type* || *description* ||
+|| .outColorArray || float3Array || array of output colors ||
 
 ----
 
@@ -13,12 +28,12 @@ Documentation for the anima-oss maya plugins
 
 == animaWeightedBlend ==
 *Description:*
-A blendShape deformer with three target shapes. Can use vtxColors as per vertex weights - components R, G and B relate to targets A, B and C.
+ A blendShape deformer with three target shapes. Can use vtxColors as per vertex weights - components R, G and B relate to targets A, B and C.
 
-In "targetSequential" mode the targets are driven in a sequential way with the red component. The targets are placed at values specified with the weightA, weightB and weightC attrs. The weights need to be 0.0 <= wA <= wB <= wC. 
+ In "targetSequential" mode the targets are driven in a sequential way with the red component. The targets are placed at values specified with the weightA, weightB and weightC attrs. The weights need to be 0.0 <= wA <= wB <= wC. 
 
 *Usage:*
-select mesh -> "deformer -type animaWeightedBlend" -> connect target meshes to the node
+ select mesh -> "deformer -type animaWeightedBlend" -> connect target meshes to the node
 
 || *INPUTS* || *type* || *description* ||
 || .targetA || mesh || targetA mesh ||
@@ -33,7 +48,7 @@ select mesh -> "deformer -type animaWeightedBlend" -> connect target meshes to t
 
 == animaVtxShader ==
 *Description:*
-Samples the connected shader at the points of the vertices and outputs the results as vertex colors on the mesh.
+ Samples the connected shader at the vertices and outputs the results as vertex colors on the mesh.
 
 || *INPUTS* || *type* || *description* ||
 || .inMesh || mesh ||input mesh - use "worldMesh" ||
@@ -47,5 +62,19 @@ Samples the connected shader at the points of the vertices and outputs the resul
 
 
 == animaShrinkage ==
+*Description:*
+ Generates vtxColors based on how much the mesh shrinks/stretches. Red = shrinkage and Green = stretch. Can be used for example to drive deterministic cloth wrinkling effects.
+
+|| *INPUTS* || *type* || *description* ||
+|| .origMesh || mesh || the mesh at "rest pose" (should not deform)||
+|| .inMesh || mesh || the input mesh (normally the rigged mesh)||
+|| .shrinkMin || float || amount of shrink which becomes 0.0 ||
+|| .shrinkMax || float || amount of shrink which becomes 1.0 ||
+|| .stretchMin || float || amount of stretch which becomes 0.0 ||
+|| .stretchMax || float || amount of stretch which becomes 1.0 ||
+
+|| *OUTPUTS* || *type* || *description* ||
+|| .outMesh || mesh || the output mesh with the vtxColors ||
+
 
 ----
