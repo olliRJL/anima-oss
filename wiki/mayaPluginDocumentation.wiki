@@ -14,6 +14,19 @@ Documentation for the anima-oss maya plugins
 == animaWeightedBlend ==
 
 == animaVtxShader ==
+*Description:*
+Samples the connected shader at the points of the vertices and outputs the results as vertex colors on the mesh.
+
+|| *INPUTS* || *description* ||
+|| .inMesh || input mesh - use "worldMesh" ||
+|| .refMesh || optional "texture reference mesh" - use "worldMesh" ||
+|| .inColor || connect shading network here ||
+|| .SG || string attr for a shading group name if one wants to sample SG (with lights and all) instead of a plain shading network (overrides the connection at .inColor) ||
+|| .trigger || use this to force update on the node when nothing is actually "dirtied" in the shader - connect for example time or the worldMatrix of a light ||
+
+|| *OUTPUTS* || *description* ||
+|| .outMesh || the output mesh with the freshly computed vtxColors ||
+
 
 == animaShrinkage ==
 
