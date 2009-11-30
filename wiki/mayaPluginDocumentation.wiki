@@ -35,6 +35,24 @@
 *Usage:*
  select mesh -> "deformer -type animaWeightedBlend" -> connect target meshes to the node
 
+ or...
+
+{{{
+// animaWeightedBlend + animaVtxShader usage
+// select baseMesh targetMesh (in this order)
+// then:
+
+string $seles[] = `ls -sl`;
+string $aVS = `createNode animaVtxShader`;
+string $orig[] = `duplicate -name ($seles[0]+"_orig") $seles[0]`;
+hide $orig[0];
+connectAttr -f ($orig[0]+".worldMesh") ($aVS+".inMesh");
+connectAttr -f ($aVS+".outMesh") ($seles[0]+".inMesh");
+string $defo[] = `deformer -type animaWeightedBlend $seles[0]`;
+connectAttr -f ($seles[1]+".worldMesh") ($defo[0]+".targetA");
+setAttr ($defo[0]+".useVertexColorScale") 1;
+}}}
+
 || *INPUTS* || *type* || *description* ||
 || .targetA || mesh || targetA mesh ||
 || .targetB || mesh || targetB mesh ||
