@@ -39,7 +39,7 @@ Samples the connected shader at the points of the vertices and outputs the resul
 || .inMesh || mesh ||input mesh - use "worldMesh" ||
 || .refMesh || mesh || optional "texture reference mesh" - use "worldMesh" ||
 || .inColor || float3 || connect shading network here ||
-|| .SG || string || shading group name if one wants to sample SG (with lights and all) instead of a plain shading network (overrides the connection at .inColor) ||
+|| .SG || string || shading group name if one wants to sample a shading group (with lights and all) instead of a plain shading network (overrides the connection at .inColor) ||
 || .trigger || message ||use this to force update on the node when nothing is actually "dirtied" in the shader - connect for example time or the worldMatrix of a light ||
 
 || *OUTPUTS* || *type* || *description* ||
