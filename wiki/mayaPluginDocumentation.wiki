@@ -12,20 +12,38 @@ Documentation for the anima-oss maya plugins
 = animaVtxToolkit =
 
 == animaWeightedBlend ==
+*Description:*
+A blendShape deformer with three target shapes. Can use vtxColors as per vertex weights - components R, G and B relate to targets A, B and C.
+
+In "targetSequential" mode the targets are driven in a sequential way with the red component. The targets are placed at values specified with the weightA, weightB and weightC attrs. The weights need to be 0.0 <= wA <= wB <= wC. 
+
+*Usage:*
+select mesh -> "deformer -type animaWeightedBlend" -> connect target meshes to the node
+
+|| *INPUTS* || *type* || *description* ||
+|| .targetA || mesh || targetA mesh ||
+|| .targetB || mesh || targetB mesh ||
+|| .targetC || mesh || targetC mesh ||
+|| .weightA || float || targetA weight ||
+|| .weightB || float || targetB weight ||
+|| .weightC || float || targetC weight ||
+|| .targetsSequential || bool || switch for the sequential mode ||
+|| .baseMeshDeforms || bool || tick this on if the input baseMesh deforms - otherwise we optimize by not recomputing the deformation deltas all the time ||
+|| .useVertexColorScale || bool || switch for the "use vtxColors as weights" mode ||
 
 == animaVtxShader ==
 *Description:*
 Samples the connected shader at the points of the vertices and outputs the results as vertex colors on the mesh.
 
-|| *INPUTS* || *description* ||
-|| .inMesh || input mesh - use "worldMesh" ||
-|| .refMesh || optional "texture reference mesh" - use "worldMesh" ||
-|| .inColor || connect shading network here ||
-|| .SG || string attr for a shading group name if one wants to sample SG (with lights and all) instead of a plain shading network (overrides the connection at .inColor) ||
-|| .trigger || use this to force update on the node when nothing is actually "dirtied" in the shader - connect for example time or the worldMatrix of a light ||
+|| *INPUTS* || *type* || *description* ||
+|| .inMesh || mesh ||input mesh - use "worldMesh" ||
+|| .refMesh || mesh || optional "texture reference mesh" - use "worldMesh" ||
+|| .inColor || float3 || connect shading network here ||
+|| .SG || string || shading group name if one wants to sample SG (with lights and all) instead of a plain shading network (overrides the connection at .inColor) ||
+|| .trigger || message ||use this to force update on the node when nothing is actually "dirtied" in the shader - connect for example time or the worldMatrix of a light ||
 
-|| *OUTPUTS* || *description* ||
-|| .outMesh || the output mesh with the freshly computed vtxColors ||
+|| *OUTPUTS* || *type* || *description* ||
+|| .outMesh || mesh || the output mesh with the freshly computed vtxColors ||
 
 
 == animaShrinkage ==
