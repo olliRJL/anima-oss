@@ -1,4 +1,4 @@
-Documentation for the anima-oss maya plugins
+#Documentation for the anima-oss maya plugins
 <wiki:toc max_depth="2" />
 
 ----
