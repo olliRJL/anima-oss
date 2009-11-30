@@ -1,0 +1,135 @@
+//////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2009, Anima Vitae Ltd. All rights reserved.
+//
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are
+//  met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//
+//     * Neither the name of Anima Vitae Ltd. nor the names of any
+//       other contributors to this software may be used to endorse or
+//       promote products derived from this software without specific prior
+//       written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+//  IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+//  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+//  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+//  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+//  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+//  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+//  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////
+//
+//  animaShaderSampler()
+// 
+//  Usage:
+//  	Select one or more transform nodes and run "animaShaderSampler".
+//  	The procedure connects selected xforms to a animaShaderSampler node
+//  	and the result colors back to the xforms.
+//
+//////////////////////////////////////////////////////////////////////////
+
+global proc animaShaderSampler()
+{
+	if (!`pluginInfo -q -l animaShaderSampler`)
+	{
+		print "[aSS] animaShaderSampler plugin not loaded\n";
+		print "[aSS] loading now - please rerun this script!\n";
+		loadPlugin animaShaderSampler;
+		return;
+	}	
+
+	string $selTrs[] = `ls -sl -tr`;
+	string $sele;
+	
+	if (!`size $selTrs`)
+	{
+		print "[aSS] Select atleast one transform node\n";
+		return;
+	}
+	
+	// try to find an existing node
+	string $aSSnode = "";
+	string $aSSnodes[];
+	for($sele in $selTrs)
+	{
+		$aSSnodes = `listConnections -t animaShaderSampler $sele`;
+		if( `size $aSSnodes` )
+		{
+			$aSSnode = $aSSnodes[0];
+			print ("[aSS] found existing aSSnode: " + $aSSnode +"\n");
+			break;
+		}
+	}
+	if ($aSSnode=="")
+	{
+		// create a new node if needed
+		$aSSnode = `createNode animaShaderSampler`;
+	}
+	
+	// break existing connections!
+	string $attrs[] = `listAttr -m -st "samplePos*" -st "uArray*" -st "vArray*" $aSSnode`;
+	string $attr;
+	for ( $attr in $attrs )
+	{
+		removeMultiInstance -b 1 ($aSSnode+"."+$attr);
+	}
+	$attrs = `listAttr -m -st "outColorArray*" $aSSnode`;
+	string $temps[];
+	for ( $attr in $attrs )
+	{
+		if(`tokenize $attr "." $temps`==1)
+		{ 
+		print ("\n"+($aSSnode+"."+$attr));
+			string $conns[] = `listConnections -p 1 ($aSSnode+"."+$attr)`;
+			if (`size $conns`)
+			{
+				disconnectAttr ($aSSnode+"."+$attr) $conns[0];
+				removeMultiInstance -b 1 ($aSSnode+"."+$attr);
+			}
+		}
+	}
+
+	// create connections
+	int $i = 0;
+	for($sele in $selTrs)
+	{
+		if (!`attributeExists "uCoord" $sele`) {
+			addAttr -ln uCoord -at double  $sele;
+			setAttr -e -keyable true ($sele+".uCoord");
+		}	
+		if (!`attributeExists "vCoord" $sele`) {
+			addAttr -ln vCoord -at double  $sele;
+			setAttr -e -keyable true ($sele+".vCoord");
+		}	
+		if (!`attributeExists "color" $sele`) {
+			$attr = "color";
+			addAttr -longName $attr -usedAsColor -attributeType float3 $sele;
+			addAttr -longName ($attr+"R") -attributeType "float" -parent $attr $sele;
+			addAttr -longName ($attr+"G") -attributeType "float" -parent $attr $sele;
+			addAttr -longName ($attr+"B") -attributeType "float" -parent $attr $sele;
+		}
+		
+		connectAttr -f ($sele+".worldMatrix") ($aSSnode+".samplePosMatrixArray["+$i+"]");
+		connectAttr -f ($sele+".uCoord") ($aSSnode+".uArray["+$i+"]");
+		connectAttr -f ($sele+".vCoord") ($aSSnode+".vArray["+$i+"]");
+		connectAttr -f ($aSSnode+".outColorArray["+$i+"]") ($sele+".color");
+		
+		$i++;	
+	}
+
+}
