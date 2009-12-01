@@ -30,7 +30,9 @@
 *Description:*
  A blendShape deformer with three target shapes. Can use vtxColors as per vertex weights - components R, G and B relate to targets A, B and C.
 
- In "targetSequential" mode the targets are driven in a sequential way with the red component. The targets are placed at values specified with the weightA, weightB and weightC attrs. The weights need to be 0.0 <= wA <= wB <= wC. 
+ In "targetSequential" mode the targets are driven in a sequential way with the red component. The targets are placed at values specified with the weightA, weightB and weightC attrs. The weights need to be 0.0 <= wA <= wB <= wC.
+
+ Base mesh and the targets must have matching topologies!
 
 *Usage:*
  select mesh -> "deformer -type animaWeightedBlend" -> connect target meshes to the node
