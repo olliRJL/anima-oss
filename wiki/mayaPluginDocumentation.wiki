@@ -17,7 +17,7 @@
 || .uArray|| floatArray || array of u-values  ||
 || .vArray|| floatArray || array of v-values  ||
 || .inColor || float3 || connect shading network here ||
-|| .SG || string || shading group name if one wants to sample a shading group (with lights and all) instead of a plain shading network (overrides the connection at .inColor) ||
+|| .SG || string || shading group name if one wants to sample a shading group (with lights and all) instead of a plain shading network (overrides the connection at .inColor). Doesn't really make sense here though as there's no normals or anything :D ||
 
 || *OUTPUTS* || *type* || *description* ||
 || .outColorArray || float3Array || array of output colors ||
