@@ -6,4 +6,4 @@ We currently provide no build system for the provided maya plugins since the Mak
 
 We are looking into providing something a bit more flexible (and maybe more modern too) for this project.
 
-How ever the plugins should be very easy to build using the instructions in Maya docs or by customising whatever system you already use. The plugins are structured in a very standard fashion. The name of the plugin .so or .mll should be derived from the folder name.
+However the plugins should be very easy to build using the instructions in Maya docs or by customising whatever system you already use. The plugins are structured in a very standard fashion. The name of the plugin .so or .mll should be derived from the folder name.
