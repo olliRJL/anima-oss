@@ -1,0 +1,9 @@
+#summary Build instructions.
+
+= Building =
+
+We currently include no build system for the provided maya plugins since the Make system we currently use at Anima isn't flexible enough for this use and relies too much on the way our file system is laid out.
+
+We are looking into providing something a bit more flexible (and maybe more modern too) for this project.
+
+How ever the plugins should be very easy to build using the instructions in Maya docs or by customising whatever system you already use. The plugins are structured in a very standard fashion.
