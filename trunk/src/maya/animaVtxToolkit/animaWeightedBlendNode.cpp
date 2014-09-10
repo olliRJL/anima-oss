@@ -73,10 +73,11 @@ MStatus animaWeightedBlend::deform(MDataBlock& block,
 	bool targetCOn = targetCPlug.isConnected();
 	bool Cdirty = !block.isClean(aTargetC);
 	// inputMesh
+	/*
 	MPlug inputGeomPlug(thisMObject(),inputGeom);
 	bool inputOn = inputGeomPlug.isConnected();
 	bool inputDirty = !block.isClean(inputGeom);
-	
+	*/
 	MDataHandle envData = block.inputValue(envelope, &returnStatus);
 	if (MS::kSuccess != returnStatus) return returnStatus;
 	float env = envData.asFloat();	
@@ -108,10 +109,13 @@ MStatus animaWeightedBlend::deform(MDataBlock& block,
 	MColorArray vertexColors;
 	if (Adirty || Bdirty || Cdirty || useVCol || baseDeforms)
 	{
-		MObject inputObject;
-		inputGeomPlug.getValue( inputObject ); 
-		MFnMesh inputMesh( inputObject );
-		
+		// get input mesh... this time in a proper way :D
+		MStatus status;
+		MArrayDataHandle hInput = block.outputArrayValue( input, &status );
+		status = hInput.jumpToElement( multiIndex );
+		MObject oInputGeom = hInput.outputValue().child( inputGeom ).asMesh();
+		MFnMesh inputMesh( oInputGeom );
+    		
 		if(useVCol)
 		{
 			inputMesh.getVertexColors(vertexColors);
