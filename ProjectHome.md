@@ -1,0 +1,1 @@
+This is a repository for 3d related oss bits and pieces developed at [Anima Vitae Ltd.](http://www.anima.fi)
